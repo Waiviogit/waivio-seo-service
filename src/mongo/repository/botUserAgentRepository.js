@@ -17,10 +17,11 @@ const userAgentExists = async ({ userAgent }) => {
 const createUserAgent = async ({ userAgents, type }) => {
   try {
     return {
-      result: await botUserAgentModel.create({
-        userAgents,
-        type,
-      }),
+      result: await botUserAgentModel.updateOne(
+        { type },
+        { $addToSet: { userAgents: { $each: userAgents } } },
+        { upsert: true },
+      ),
     };
   } catch (error) {
     return { error };
