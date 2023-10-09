@@ -1,4 +1,4 @@
-const botUserAgentModel = require('../schemas/botStatisticsSchema');
+const botUserAgentModel = require('../../schemas/seo-bot/botStatisticsSchema');
 
 const updateOne = async ({ filter, update, options }) => {
   try {
