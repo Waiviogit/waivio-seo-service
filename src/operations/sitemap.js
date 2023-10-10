@@ -11,8 +11,8 @@ const createLinks = async ({ host }) => {
 
   const app = await db.appRepository.findOneByHost({ host });
   if (!app) return links;
-  const social = checkForSocialSite(host);
-  const objects = await db.wobjectRepository.findSiteObjects({ app, host, social });
+  const social = checkForSocialSite(app.parentHost);
+  const objects = await db.wobjectRepository.findSiteObjects({ app, social });
 
   for (const object of objects) {
     const directory = social && object.object_type === 'list' ? 'checklist' : 'object';
