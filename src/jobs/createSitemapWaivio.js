@@ -48,6 +48,10 @@ const createLinks = async (type) => {
       const cursor = processor.model.find(filter, processor.projection, { limit: MAX_LINKS_XML });
 
       for await (const doc of cursor) {
+        if (processor.name === 'post' && doc?.reblog_to) {
+          batchCount++;
+          continue;
+        }
         const link = processor.link(doc);
         links.push(link);
         lastProcessedId = doc._id;
