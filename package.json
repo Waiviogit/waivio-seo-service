@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
-    "sitemap:sites": "node ./src/jobs/createSitemapsCLI.js"
+    "sitemap:sites": "node ./src/jobs/createSitemapsCLI.js",
+    "sitemap:waivio": "node ./src/jobs/createSitemapWaivioCLI.js"
   },
   "author": "",
   "license": "ISC",

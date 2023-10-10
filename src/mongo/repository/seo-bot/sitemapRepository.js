@@ -27,6 +27,15 @@ const findOne = async ({ filter, projection, options }) => {
   }
 };
 
+const find = async ({filter, projection, options}) => {
+  try {
+    const result = await sitemapModel.find(filter, projection, options);
+    return { result };
+  } catch (error) {
+    return { error };
+  }
+};
+
 const findOneByHostName = async ({ host, name }) => {
   const { result } = await findOne({
     filter: { host, name },
@@ -48,8 +57,15 @@ const deleteManyByHost = async ({ host }) => deleteMany({
   filter: { host },
 });
 
+const findAllNamesByHost = async ({ host }) => {
+  const { result } = await find({ filter: { host }, projection: { name: 1 } });
+  if (!result.length) return [];
+  return result.map((el) => el.name);
+};
+
 module.exports = {
   createOne,
   findOneByHostName,
   deleteManyByHost,
+  findAllNamesByHost,
 };
