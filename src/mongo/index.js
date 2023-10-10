@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
-const botUserAgentRepository = require('./repository/botUserAgentRepository');
-const cachePageRepository = require('./repository/cachePageRepository');
-const botStatisticsRepository = require('./repository/botStatisticsRepository');
+const botUserAgentRepository = require('./repository/seo-bot/botUserAgentRepository');
+const cachePageRepository = require('./repository/seo-bot/cachePageRepository');
+const botStatisticsRepository = require('./repository/seo-bot/botStatisticsRepository');
+const sitemapRepository = require('./repository/seo-bot/sitemapRepository');
+const appRepository = require('./repository/waivio/appRepository');
+const wobjectRepository = require('./repository/waivio/wobjectRepository');
 
 const googleAgents = require('../common/constants/googleUserAgents');
 
@@ -25,4 +28,7 @@ module.exports = {
   botUserAgentRepository,
   cachePageRepository,
   botStatisticsRepository,
+  sitemapRepository,
+  appRepository,
+  wobjectRepository,
 };

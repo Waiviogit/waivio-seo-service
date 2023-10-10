@@ -1,4 +1,4 @@
-const cachePageModel = require('../schemas/cachePageSchema');
+const cachePageModel = require('../../schemas/seo-bot/cachePageSchema');
 
 const findOne = async ({ filter, projection, options }) => {
   try {

@@ -1,4 +1,4 @@
-const botUserAgentModel = require('../schemas/botUserAgentScema');
+const botUserAgentModel = require('../../schemas/seo-bot/botUserAgentScema');
 
 const findOne = async ({ filter, projection, options }) => {
   try {
