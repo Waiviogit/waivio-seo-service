@@ -85,7 +85,7 @@ const siteObjectsFilterSocial = ({ app }) => {
   return {
     'authority.administrative': { $in: authorities },
     'status.title': { $nin: REMOVE_OBJ_STATUSES },
-    object_type: { $in: ['book', 'product', 'list', 'business'] },
+    object_type: { $in: ['book', 'product', 'list', 'business', 'page'] },
   };
 };
 
