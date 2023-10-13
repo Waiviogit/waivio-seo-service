@@ -6,12 +6,10 @@ const db = require('../mongo');
 const { BASE_XML_NAME, MAX_LINKS_XML } = require('../common/constants/sitemap');
 
 const host = process.env.NODE_ENV === 'production'
-  ? 'waivio.com'
+  ? 'www.waivio.com'
   : 'waiviodev.com';
 
-const protocolPrefix = process.env.NODE_ENV === 'production'
-  ? 'https://www.'
-  : 'https://';
+const protocolPrefix = 'https://';
 
 const processCollection = {
   object: {
@@ -62,11 +60,13 @@ const createLinks = async (type) => {
         // No more documents to process
         break;
       }
-      await createUsualSiteMap({
-        links, host, name: `${BASE_XML_NAME}${processor.name}${iteration}`,
-      });
-      console.log(`${iteration * 50000} ${processor.name} added to sitemap`);
-      iteration++;
+      if (links.length) {
+        await createUsualSiteMap({
+          links, host, name: `${BASE_XML_NAME}${processor.name}${iteration}`,
+        });
+        console.log(`${iteration * 50000} ${processor.name} added to sitemap`);
+        iteration++;
+      }
     }
   } catch (error) {
     console.log(error);
