@@ -15,6 +15,21 @@ const find = async ({ filter, projection, options }) => {
   }
 };
 
+const findOne = async ({ filter, projection, options }) => {
+  try {
+    const result = await wObjectModel.findOne(filter, projection, options).lean();
+    return { result };
+  } catch (error) {
+    return { error };
+  }
+};
+
+const findOneByPermlink = async ({ authorPermlink }) => {
+  const { result } = await findOne({ filter: { author_permlink: authorPermlink } });
+
+  return result;
+};
+
 const siteObjectsFilterDining = ({ app }) => {
   const authorities = app?.authority ?? [];
   const orMapCond = [], orTagsCond = [];
@@ -101,6 +116,19 @@ const findSiteObjects = async ({ social, app }) => {
   return result;
 };
 
+const findListAndPageByLinks = async ({ links }) => {
+  const { result } = await find({
+    filter: {
+      author_permlink: { $in: links },
+      object_type: { $in: ['list', 'page'] },
+    },
+    projection: { author_permlink: 1, object_type: 1 },
+  });
+  return result;
+};
+
 module.exports = {
   findSiteObjects,
+  findOneByPermlink,
+  findListAndPageByLinks,
 };
