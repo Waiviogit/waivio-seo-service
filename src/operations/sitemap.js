@@ -8,6 +8,30 @@ const { parseJson } = require('../common/helpers/jsonHelper');
 
 const SOCIAL_HOSTS = ['social.gifts', 'socialgifts.pp.ua', 'localhost:4000'];
 
+const customSort = (a, b) => {
+  const order = ['list', 'page'];
+
+  const typeA = a.object_type;
+  const typeB = b.object_type;
+
+  const indexA = order.indexOf(typeA);
+  const indexB = order.indexOf(typeB);
+
+  if (indexA === -1 && indexB === -1) {
+    return 0; // Keep the original order for other types
+  }
+
+  if (indexA === -1) {
+    return 1; // Move the non-list/page objects to the end
+  }
+
+  if (indexB === -1) {
+    return -1; // Move the non-list/page objects to the end
+  }
+
+  return indexA - indexB;
+};
+
 const checkForSocialSite = (host = '') => SOCIAL_HOSTS.some((sh) => host.includes(sh));
 
 const formObjectLinks = ({ objects, host, social }) => {
@@ -73,10 +97,11 @@ const createLinks = async ({ host }) => {
   const mainObjectLists = await getListAndPagesNoAuthority({ host });
   const objects = await db.wobjectRepository.findSiteObjects({ app, social });
 
-  const mainLinks = formObjectLinks({ host, objects: mainObjectLists, social });
-  const searchLinks = formObjectLinks({ host, objects, social });
+  const resultObjects = _.uniqBy([...mainObjectLists, ...objects].sort(customSort), 'author_permlink');
 
-  return _.uniq([...mainLinks, ...searchLinks]);
+  const searchLinks = formObjectLinks({ host, objects: resultObjects, social });
+
+  return searchLinks;
 };
 
 const createSiteMap = async ({ host }) => {
