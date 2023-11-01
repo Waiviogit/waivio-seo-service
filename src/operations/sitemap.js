@@ -67,6 +67,7 @@ const getListAndPagesNoAuthority = async ({ host }) => {
         author_permlink: menuItem.linkToObject,
         object_type: menuItem.objectType,
       });
+      continue;
     }
     if (menuItem.objectType === 'list') {
       const { result, error } = await waivioApi.getListItemLinks({
@@ -76,7 +77,12 @@ const getListAndPagesNoAuthority = async ({ host }) => {
 
       if (error) continue;
       linksToCheck.push(...result);
+      continue;
     }
+    authorPermlinks.push({
+      author_permlink: menuItem.linkToObject,
+      object_type: menuItem.objectType,
+    });
   }
   if (!linksToCheck.length) return authorPermlinks;
   // search in db only types list and page
