@@ -38,7 +38,14 @@ const formObjectLinks = ({ objects, host, social }) => {
   const links = [];
   for (const object of objects) {
     const directory = social && object.object_type === 'list' ? 'checklist' : 'object';
-    links.push(`https://${host}/${directory}/${object.author_permlink}`);
+    let link = `https://${host}/${directory}/${object.author_permlink}`;
+    if (object.object_type === 'newsfeed') {
+      link = `https://${host}/${directory}/${object.author_permlink}/newsfeed`;
+    }
+    if (object.object_type === 'widget') {
+      link = `https://${host}/${directory}/${object.author_permlink}/widget`;
+    }
+    links.push(link);
   }
   return links;
 };
