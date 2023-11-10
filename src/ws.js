@@ -16,7 +16,8 @@ function init(server, routes) {
 
             if (!handler) { return connection.send('"Not found"', { binary: false }); }
 
-            const data = await handler(...args);
+            // todo replace server to first place in all api calls + refactor mongo
+            const data = await handler(...args, server);
 
             const response = JSON.stringify({ data, id });
             connection.socket.send(response, { binary: false });

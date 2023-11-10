@@ -1,7 +1,10 @@
 const db = require('../mongo');
 const { webPageValidation } = require('./validation');
 
-const getPageByUrl = async ({ url }) => {
+const getPageByUrl = async ({ url }, server) => {
+  const { redis } = server;
+
+  await redis.redis2.incr('cached_page_requested');
   const validation = webPageValidation.getPageSchema.validate({ url });
   if (validation.error) return validation.error;
   return db.cachePageRepository.findPageByUrl({ url });

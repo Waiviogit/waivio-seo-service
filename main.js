@@ -21,4 +21,6 @@ fastify.addHook('preValidation', async (request, reply) => {
   }
 });
 
+fastify.register(require('./src/plugins/redis'));
+
 ws.init(fastify, api);
