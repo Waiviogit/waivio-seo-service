@@ -12,14 +12,14 @@ fastify.listen({ port: process.env.PORT || 10020, host: '0.0.0.0' }, (err) => {
   }
 });
 
-// fastify.addHook('preValidation', async (request, reply) => {
-//   const { headers } = request;
-//   const key = headers['api-key'];
-//   const wrongKey = key !== process.env.SEO_SERVICE_API_KEY;
-//   if (wrongKey) {
-//     await reply.code(401).send('not authenticated');
-//   }
-// });
+fastify.addHook('preValidation', async (request, reply) => {
+  const { headers } = request;
+  const key = headers['api-key'];
+  const wrongKey = key !== process.env.SEO_SERVICE_API_KEY;
+  if (wrongKey) {
+    await reply.code(401).send('not authenticated');
+  }
+});
 
 fastify.register(require('./src/plugins/redis'));
 
