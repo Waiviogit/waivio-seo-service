@@ -16,14 +16,13 @@ function init(server, routes) {
 
             if (!handler) { return connection.send('"Not found"', { binary: false }); }
 
-            server.log.info('args', JSON.stringify(args));
-            server.log.info('name, method', name, method);
+            server.log.info(JSON.stringify({ name, method, args }));
             // todo replace server to first place in all api calls + refactor mongo
             const data = await handler(...args, server);
 
             const response = JSON.stringify({ data, id });
 
-            server.log.info('response', response);
+            server.log.info(JSON.stringify({ response }));
             connection.socket.send(response, { binary: false });
           } catch (err) {
             server.log.error(err);
