@@ -22,7 +22,7 @@ function init(server, routes) {
 
             const response = JSON.stringify({ data, id });
 
-            server.log.info(JSON.stringify({ response }));
+            server.log.info(JSON.stringify({ response: response.substring(0, 50) }));
             connection.socket.send(response, { binary: false });
           } catch (err) {
             server.log.error(err);
