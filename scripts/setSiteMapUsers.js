@@ -46,6 +46,8 @@ const run = async () => {
         console.log(`changed ${user.name} ${user?.canonical} ${canonical}`);
       }
 
+      if (canonical === DEFAULT_CANONICAL) continue;
+
       await sitemapUserModel.updateOne(
         {
           host: canonical, name: user.name,
