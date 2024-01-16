@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import getConfig from '../lib/config/config.js';
 
+const DEFAULT_CANONICAL = 'www.waivio.com';
+
 const run = async () => {
   const config = await getConfig();
   const { mongo } = config;
@@ -16,16 +18,41 @@ const run = async () => {
   try {
     const sitemapUserModel = seoDb.models.sitemap_users;
 
-    const users = waivioDb.models.users.find({}, { name: 1, canonical: 1 });
+    const users = waivioDb.models.users.find(
+      { canonical: { $nin: ['www.waivio.com', null, 'waivio.com'] } },
+      { name: 1, canonical: 1 },
+    );
 
     for await (const user of users) {
-      if (!user?.canonical || /(waivio\.com|localhost)/.test(user?.canonical)) continue;
+      if (!user?.canonical || /(waivio\.com)/.test(user?.canonical)) continue;
+      if (/(waiviodev\.com|localhost)/.test(user?.canonical)) {
+        console.log(`changed ${user.name} ${user?.canonical} ${DEFAULT_CANONICAL}`);
+        await waivioDb.models.users.updateOne(
+          { name: user.name },
+          { canonical: DEFAULT_CANONICAL },
+        );
+      }
+      let canonical = user?.canonical;
+      if (/(http\:\/\/|https\:\/\/)/.test(canonical)) {
+        canonical = canonical.replace(/(http\:\/\/|https\:\/\/)/, '');
 
-      await sitemapUserModel.create({
-        host: user?.canonical, name: user.name,
-      });
+        await waivioDb.models.users.updateOne(
+          { name: user.name },
+          { canonical },
+        );
 
-      console.log(`created ${user.name}${user?.canonical}`);
+        console.log(`changed ${user.name} ${user?.canonical} ${canonical}`);
+      }
+
+      await sitemapUserModel.updateOne(
+        {
+          host: canonical, name: user.name,
+        },
+        { host: canonical, name: user.name },
+        { upsert: true },
+      );
+
+      console.log(`created ${user.name} ${canonical}`);
     }
 
     console.log('task completed');
