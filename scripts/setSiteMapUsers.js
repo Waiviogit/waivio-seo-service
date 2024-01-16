@@ -19,20 +19,22 @@ const run = async () => {
     const sitemapUserModel = seoDb.models.sitemap_users;
 
     const users = waivioDb.models.users.find(
-      { canonical: { $nin: ['www.waivio.com', null, 'waivio.com'] } },
+      { canonical: { $nin: ['www.waivio.com', null] } },
       { name: 1, canonical: 1 },
     );
 
     for await (const user of users) {
-      if (!user?.canonical || /(waivio\.com)/.test(user?.canonical)) continue;
-      if (/(waiviodev\.com|localhost)/.test(user?.canonical)) {
+      let canonical = user?.canonical;
+
+      if (/(waiviodev\.com|localhost|waivio\.com)/.test(user?.canonical)) {
         console.log(`changed ${user.name} ${user?.canonical} ${DEFAULT_CANONICAL}`);
         await waivioDb.models.users.updateOne(
           { name: user.name },
           { canonical: DEFAULT_CANONICAL },
         );
+        canonical = DEFAULT_CANONICAL;
       }
-      let canonical = user?.canonical;
+
       if (/(http\:\/\/|https\:\/\/)/.test(canonical)) {
         canonical = canonical.replace(/(http\:\/\/|https\:\/\/)/, '');
 
