@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node index.js",
     "sitemap:addUsers": "node ./scripts/setSiteMapUsers.js",
-    "sitemap:sites": "node ./oldVersion/jobs/createSitemapsCLI.js",
+    "sitemap:sites": "node ./scripts/createSitemapsCLI.js",
     "sitemap:waivio": "node ./oldVersion/jobs/createSitemapWaivioCLI.js"
   },
   "author": "",
