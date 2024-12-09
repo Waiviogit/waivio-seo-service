@@ -8,7 +8,8 @@
     "start": "node index.js",
     "sitemap:addUsers": "node ./scripts/setSiteMapUsers.js",
     "sitemap:sites": "node ./scripts/createSitemapsCLI.js",
-    "sitemap:waivio": "node ./oldVersion/jobs/createSitemapWaivioCLI.js"
+    "sitemap:waivio": "node ./oldVersion/jobs/createSitemapWaivioCLI.js",
+    "clean-cache-bucket": "node ./scripts/clearCacheBucketCLI.js"
   },
   "author": "",
   "license": "ISC",
